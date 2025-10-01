@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll SnapChat</title>
+    <style>
+        body {
+            display: grid;
+            grid-auto-flow: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            min-height: 100vh;
+            margin: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: hsl(200, 20%, 98%);
+        }
+
+        .chat-ui {
+            --chat-ui_theme: hsl(200, 100%, 50%);
+            --chat-ui_theme_compliment: hsl(20, 100%, 50%);
+            --chat-ui_theme_text-color: white;
+            --chat-ui_bg: hsl(0, 0%, 90%);
+            --chat-ui_width: 350px;
+            --chat-ui_height: 480px;
+            --chat-ui_message_bg: white;
+            --chat-ui_message_radius: 1rem;
+            --chat-ui_message_padding: 1rem;
+            --chat-ui_gap: 1rem;
+            --chat-ui_avatar_size: 40px;
+
+            background: var(--chat-ui_bg);
+            border-radius: 1rem;
+            width: var(--chat-ui_width);
+            height: var(--chat-ui_height);
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .chat-titlebar {
+            background: var(--chat-ui_theme);
+            color: var(--chat-ui_theme_text-color);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-titlebar h5 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .chat-avatar {
+            width: var(--chat-ui_avatar_size);
+            height: var(--chat-ui_avatar_size);
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .chat-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .chat-scrollview {
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messagelist {
+            display: flex;
+            flex-direction: column;
+            gap: var(--chat-ui_gap);
+        }
+
+        .chat-cluster {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+            scroll-snap-align: end;
+            scroll-snap-stop: always;
+        }
+
+        .chat-cluster section {
+            flex: 1;
+        }
+
+        .chat-cluster h3 {
+            margin: 0 0 0.25rem 0;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--chat-ui_theme);
+        }
+
+        .chat-message {
+            background: var(--chat-ui_message_bg);
+            padding: var(--chat-ui_message_padding);
+            border-radius: var(--chat-ui_message_radius);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            line-height: 1.4;
+        }
+
+        .chat-authoring {
+            padding: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-end;
+            background: white;
+            border-top: 1px solid hsl(0, 0%, 85%);
+        }
+
+        .chat-authoring textarea {
+            flex: 1;
+            border: 1px solid hsl(0, 0%, 80%);
+            border-radius: 1.5rem;
+            padding: 0.75rem 1rem;
+            resize: none;
+            font-family: inherit;
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .chat-authoring textarea:focus {
+            border-color: var(--chat-ui_theme);
+        }
+
+        .chat-authoring button {
+            background: var(--chat-ui_theme);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .chat-authoring button:hover {
+            background: hsl(200, 100%, 45%);
+        }
+
+        .chat-authoring button:disabled {
+            background: hsl(0, 0%, 70%);
+            cursor: not-allowed;
+        }
+
+        /* Bot demo textarea */
+        textarea[placeholder*="bot"] {
+            width: 300px;
+            padding: 1rem;
+            border: 1px solid hsl(0, 0%, 80%);
+            border-radius: 0.5rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <textarea placeholder="Send a message as the bot.."></textarea>
+    
+    <div class="chat-ui">
+        <div class="chat-titlebar">
+            <h5>Chat UI</h5>
+            <div class="chat-avatar">
+                <img src="https://cdn.dribbble.com/users/37530/screenshots/2937858/drib_blink_bot.gif" alt="Bot Avatar">
+            </div>
+        </div>
+        
+        <div class="chat-scrollview">
+            <div class="chat-messagelist">
+                <div class="chat-cluster">
+                    <div class="chat-avatar">
+                        <img src="https://cdn.dribbble.com/users/37530/screenshots/2937858/drib_blink_bot.gif" alt="Bot Avatar">
+                    </div>
+                    <section>
+                        <h3>Snap Bot</h3>
+                        <div class="chat-message">Welcome to Scroll SnapChat! 👋</div>
+                    </section>
+                </div>
+                
+                <div class="chat-cluster">
+                    <div class="chat-avatar">
+                        <img src="https://cdn.dribbble.com/users/37530/screenshots/2937858/drib_blink_bot.gif" alt="Bot Avatar">
+                    </div>
+                    <section>
+                        <h3>Snap Bot</h3>
+                        <div class="chat-message">This chat interface features scroll snapping for smooth navigation between messages.</div>
+                    </section>
+                </div>
+                
+                <div class="chat-cluster">
+                    <div class="chat-avatar">
+                        <img src="https://cdn.dribbble.com/users/37530/screenshots/2937858/drib_blink_bot.gif" alt="Bot Avatar">
+                    </div>
+                    <section>
+                        <h3>Snap Bot</h3>
+                        <div class="chat-message">Try using the textarea on the left to send me a message!</div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-authoring">
+            <textarea placeholder="Type your message..."></textarea>
+            <button type="button" title="Send message" aria-label="Send message">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const bot = document.querySelector('textarea[placeholder*="bot"]');
+        const author = document.querySelector('.chat-authoring');
+        const scrollview = document.querySelector('.chat-scrollview');
+        const messagelist = document.querySelector('.chat-messagelist');
+        const messageInput = document.querySelector('.chat-authoring textarea');
+        const sendButton = document.querySelector('.chat-authoring button');
+
+        const bot_template = message => `
+            <div class="chat-cluster">
+                <div class="chat-avatar">
+                    <img src="https://cdn.dribbble.com/users/37530/screenshots/2937858/drib_blink_bot.gif" alt="Bot Avatar">
+                </div>
+                <section>
+                    <h3>Snap Bot</h3>
+                    <div class="chat-message">${message}</div>
+                </section>
+            </div>
+        `;
+
+        const user_template = message => `
+            <div class="chat-cluster" style="flex-direction: row-reverse;">
+                <div class="chat-avatar" style="background: var(--chat-ui_theme); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">
+                    You
+                </div>
+                <section style="text-align: right;">
+                    <h3 style="color: var(--chat-ui_theme_compliment);">You</h3>
+                    <div class="chat-message" style="background: var(--chat-ui_theme); color: white;">${message}</div>
+                </section>
+            </div>
+        `;
+
+        function addMessage(template, message) {
+            if (!message.trim()) return;
+            
+            const messageElement = document.createElement('div');
+            messageElement.innerHTML = template(message);
+            messagelist.appendChild(messageElement.firstElementChild);
+            
+            // Scroll to the new message with snap behavior
+            scrollview.scrollTop = scrollview.scrollHeight;
+        }
+
+        function sendUserMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                addMessage(user_template, message);
+                messageInput.value = '';
+                
+                // Auto-reply from bot after a short delay
+                setTimeout(() => {
+                    const replies = [
+                        "Thanks for your message! 🤖",
+                        "I received that loud and clear!",
+                        "Interesting point! Tell me more.",
+                        "Got it! Anything else?",
+                        "That's cool! What do you think about scroll snapping?"
+                    ];
+                    const randomReply = replies[Math.floor(Math.random() * replies.length)];
+                    addMessage(bot_template, randomReply);
+                }, 1000);
+            }
+        }
+
+        // Send message on button click
+        sendButton.addEventListener('click', sendUserMessage);
+
+        // Send message on Enter key (but allow Shift+Enter for new lines)
+        messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendUserMessage();
+            }
+        });
+
+        // Bot textarea functionality
+        bot.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                const message = bot.value.trim();
+                if (message) {
+                    addMessage(bot_template, message);
+                    bot.value = '';
+                }
+            }
+        });
+
+        // Auto-focus message input
+        messageInput.focus();
+    </script>
+</body>
+</html>
